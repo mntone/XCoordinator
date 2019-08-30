@@ -6,11 +6,24 @@
 //  Copyright © 2018 QuickBird Studios. All rights reserved.
 //
 
+#if os(iOS) || os(tvOS)
+
 /// An type-erased Coordinator (`AnyCoordinator`) with a `UINavigationController` as rootViewController.
 public typealias AnyNavigationCoordinator<RouteType: Route> = AnyCoordinator<RouteType, NavigationTransition>
 
+#endif
+
+#if os(macOS)
+
+/// An type-erased Coordinator (`AnyCoordinator`) with a `NSTabViewController` as rootViewController.
+public typealias AnyTabBarCoordinator<RouteType: Route> = AnyCoordinator<RouteType, TabViewTransition>
+
+#else
+
 /// An type-erased Coordinator (`AnyCoordinator`) with a `UITabBarController` as rootViewController.
 public typealias AnyTabBarCoordinator<RouteType: Route> = AnyCoordinator<RouteType, TabBarTransition>
+
+#endif
 
 /// An type-erased Coordinator (`AnyCoordinator`) with a `UIViewController` as rootViewController.
 public typealias AnyViewCoordinator<RouteType: Route> = AnyCoordinator<RouteType, ViewTransition>
@@ -29,10 +42,18 @@ public class AnyCoordinator<RouteType: Route, TransitionType: TransitionProtocol
     // MARK: - Stored properties
 
     private let _prepareTransition: (RouteType) -> TransitionType
+    #if os(macOS)
+    private let _viewController: () -> NSViewController?
+    #else
     private let _viewController: () -> UIViewController?
+    #endif
     private let _rootViewController: () -> TransitionType.RootViewController
     private let _presented: (Presentable?) -> Void
+    #if os(macOS)
+    private let _setRoot: (NSWindow) -> Void
+    #else
     private let _setRoot: (UIWindow) -> Void
+    #endif
 
     // MARK: - Initialization
 
@@ -58,9 +79,15 @@ public class AnyCoordinator<RouteType: Route, TransitionType: TransitionProtocol
         return _rootViewController()
     }
 
+    #if os(macOS)
+    public var viewController: NSViewController! {
+        return _viewController()
+    }
+    #else
     public var viewController: UIViewController! {
         return _viewController()
     }
+    #endif
 
     // MARK: - Methods
 
@@ -81,7 +108,13 @@ public class AnyCoordinator<RouteType: Route, TransitionType: TransitionProtocol
         _presented(presentable)
     }
 
+    #if os(macOS)
+    public func setRoot(for window: NSWindow) {
+        _setRoot(window)
+    }
+    #else
     public func setRoot(for window: UIWindow) {
         _setRoot(window)
     }
+    #endif
 }

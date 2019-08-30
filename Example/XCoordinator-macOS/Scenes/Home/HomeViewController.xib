@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="HomeViewController" customModule="XCoordinator_macOS_Example" customModuleProvider="target">
+            <connections>
+                <outlet property="aboutButton" destination="hUO-1s-ydz" id="Ac8-RC-Bge"/>
+                <outlet property="logoutButton" destination="TzC-3q-aCT" id="g1w-RD-DCx"/>
+                <outlet property="usersButton" destination="YFH-SB-J4M" id="r7f-gr-Mz1"/>
+                <outlet property="view" destination="CZf-iR-ame" id="pCX-da-IQs"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="CZf-iR-ame">
+            <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <stackView distribution="fill" orientation="vertical" alignment="centerX" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ak3-gd-lKQ">
+                    <rect key="frame" x="205" y="97" width="71" height="79"/>
+                    <subviews>
+                        <button autoresizesSubviews="NO" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="TzC-3q-aCT">
+                            <rect key="frame" x="-6" y="51" width="83" height="32"/>
+                            <buttonCell key="cell" type="push" title="Logout" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="3CI-zV-xtn">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                        </button>
+                        <button autoresizesSubviews="NO" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="YFH-SB-J4M">
+                            <rect key="frame" x="-3" y="22" width="76" height="32"/>
+                            <buttonCell key="cell" type="push" title="Users" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="1Fx-0B-9bO">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                        </button>
+                        <button autoresizesSubviews="NO" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hUO-1s-ydz">
+                            <rect key="frame" x="-3" y="-7" width="77" height="32"/>
+                            <buttonCell key="cell" type="push" title="About" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="rqm-bR-PCU">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                        </button>
+                    </subviews>
+                    <visibilityPriorities>
+                        <integer value="1000"/>
+                        <integer value="1000"/>
+                        <integer value="1000"/>
+                    </visibilityPriorities>
+                    <customSpacing>
+                        <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
+                    </customSpacing>
+                </stackView>
+            </subviews>
+            <constraints>
+                <constraint firstItem="ak3-gd-lKQ" firstAttribute="centerY" secondItem="CZf-iR-ame" secondAttribute="centerY" id="B1Z-2R-gTr"/>
+                <constraint firstItem="ak3-gd-lKQ" firstAttribute="centerX" secondItem="CZf-iR-ame" secondAttribute="centerX" id="TFq-Jf-4KH"/>
+            </constraints>
+        </customView>
+    </objects>
+</document>

@@ -56,7 +56,7 @@ extension Coordinator where Self: AnyObject {
     ///
     public func deepLink<RootViewController, S: Sequence>(_ route: RouteType, _ remainingRoutes: S)
         -> Transition<RootViewController> where S.Element == Route, TransitionType == Transition<RootViewController> {
-        return .deepLink(with: self, route, array: Array(remainingRoutes))
+            return .deepLink(with: self, route, array: Array(remainingRoutes))
     }
 
     ///
@@ -74,7 +74,7 @@ extension Coordinator where Self: AnyObject {
     ///
     public func deepLink<RootViewController>(_ route: RouteType, _ remainingRoutes: Route...)
         -> Transition<RootViewController> where TransitionType == Transition<RootViewController> {
-        return .deepLink(with: self, route, array: remainingRoutes)
+            return .deepLink(with: self, route, array: remainingRoutes)
     }
 }
 

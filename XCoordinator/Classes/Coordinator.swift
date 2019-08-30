@@ -46,9 +46,15 @@ extension Coordinator {
 extension Coordinator {
 
     /// A Coordinator uses its rootViewController as viewController, with the exception `RedirectionCoordinator`.
+    #if os(macOS)
+    public var viewController: NSViewController! {
+        return rootViewController
+    }
+    #else
     public var viewController: UIViewController! {
         return rootViewController
     }
+    #endif
 }
 
 // MARK: - Default implementations

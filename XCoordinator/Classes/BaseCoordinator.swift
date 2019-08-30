@@ -92,6 +92,20 @@ open class BaseCoordinator<RouteType: Route, TransitionType: TransitionProtocol>
     // MARK: - Private methods
 
     private func performTransitionAfterWindowAppeared(_ transition: TransitionType) {
+        #if os(macOS)
+        guard NSApplication.shared.keyWindow == nil else {
+            return performTransition(transition, with: .default)
+        }
+
+        var windowAppearanceObserver: Any?
+
+        windowAppearanceObserver = NotificationCenter.default.addObserver(
+        forName: NSWindow.didBecomeKeyNotification, object: nil, queue: .main) { [weak self] _ in
+            windowAppearanceObserver.map(NotificationCenter.default.removeObserver)
+            windowAppearanceObserver = nil
+            self?.performTransition(transition, with: .default)
+        }
+        #else
         guard UIApplication.shared.keyWindow == nil else {
             return performTransition(transition, with: TransitionOptions(animated: false))
         }
@@ -100,14 +114,17 @@ open class BaseCoordinator<RouteType: Route, TransitionType: TransitionProtocol>
 
         rootViewController.beginAppearanceTransition(true, animated: false)
         windowAppearanceObserver = NotificationCenter.default.addObserver(
-            forName: UIWindow.didBecomeKeyNotification, object: nil, queue: .main) { [weak self] _ in
+        forName: UIWindow.didBecomeKeyNotification, object: nil, queue: .main) { [weak self] _ in
             windowAppearanceObserver.map(NotificationCenter.default.removeObserver)
             windowAppearanceObserver = nil
             self?.performTransition(transition, with: TransitionOptions(animated: false))
             self?.rootViewController.endAppearanceTransition()
         }
+        #endif
     }
 }
+
+#if os(iOS) || os(tvOS)
 
 // MARK: - Interactive Transitions
 
@@ -221,7 +238,7 @@ extension BaseCoordinator {
                 @unknown default:
                     break
                 }
-            },
+        },
             completion: completion
         )
     }
@@ -246,3 +263,5 @@ extension BaseCoordinator {
         }
     }
 }
+
+#endif

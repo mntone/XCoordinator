@@ -12,6 +12,9 @@ import XCoordinator
 
 protocol UsersViewModelInput {
     var showUserTrigger: InputSubject<String> { get }
+	#if os(macOS)
+	var closeTrigger: InputSubject<Void> { get }
+	#endif
 }
 
 protocol UsersViewModelOutput {

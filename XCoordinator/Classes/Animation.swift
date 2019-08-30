@@ -29,6 +29,11 @@ open class Animation: NSObject {
     ///
     public static let `default` = Animation(presentation: nil, dismissal: nil)
 
+    #if os(macOS)
+    var options: XCoordinator.TransitionOptions?
+    var completion: PresentationHandler?
+    #endif
+
     // MARK: - Stored properties
 
     /// The transition animation performed when transitioning to a presentable.
@@ -51,6 +56,83 @@ open class Animation: NSObject {
         self.dismissalAnimation = dismissal
     }
 }
+
+#if os(macOS)
+
+// MARK: - NSViewControllerPresentationAnimator
+
+extension Animation: NSViewControllerPresentationAnimator {
+
+    ///
+    /// See [NSViewControllerPresentationAnimator](https://developer.apple.com/documentation/appkit/NSViewControllerPresentationAnimator)
+    /// for further reference.
+    ///
+    /// - Parameters:
+    ///     - viewController: The view controller that is being presented in place of the one in the fromViewController parameter.
+    ///     - fromViewController: The view controller that is the parent of the one in the viewController parameter.
+    ///
+    open func animatePresentation(of viewController: NSViewController, from fromViewController: NSViewController) {
+        defer {
+            self.options = nil
+            self.completion = nil
+        }
+
+        let oldViewController = fromViewController.children.last
+
+        let containerView = fromViewController.view
+        viewController.view.autoresizingMask = [.width, .height]
+        viewController.view.frame = containerView.frame
+        fromViewController.addChild(viewController)
+
+        if options!.animated, let presentationAnimation = self.presentationAnimation {
+            let context = NSViewControllerContextTransitioningImpl(containerView: containerView,
+                                                                   fromViewController: oldViewController,
+                                                                   toViewController: viewController,
+                                                                   completion: self.completion)
+            presentationAnimation.animate(using: context)
+        } else {
+            containerView.addSubview(viewController.view)
+
+            oldViewController?.view.removeFromSuperview()
+
+            completion?()
+        }
+    }
+
+    ///
+    /// See [NSViewControllerPresentationAnimator](https://developer.apple.com/documentation/appkit/NSViewControllerPresentationAnimator)
+    /// for further reference.
+    ///
+    /// - Parameters:
+    ///     - viewController: The view controller that is being dismissed.
+    ///     - fromViewController: The view controller that is the parent of the one in the viewController parameter.
+    ///
+    open func animateDismissal(of viewController: NSViewController, from fromViewController: NSViewController) {
+        defer { self.completion = nil }
+
+        let containerView = fromViewController.view
+        let childViewControllers = fromViewController.children
+        let oldViewController = childViewControllers.count >= 2
+            ? childViewControllers[childViewControllers.count - 2]
+            : nil
+        oldViewController?.view.frame = containerView.frame
+
+        if options!.animated, let dismissalAnimation = self.dismissalAnimation {
+            let context = NSViewControllerContextTransitioningImpl(containerView: containerView,
+                                                                   fromViewController: viewController,
+                                                                   toViewController: oldViewController,
+                                                                   completion: self.completion)
+            dismissalAnimation.animate(using: context)
+        } else {
+            (oldViewController?.view).map(fromViewController.view.addSubview)
+
+            viewController.view.removeFromSuperview()
+            completion?()
+        }
+    }
+}
+
+#else
 
 // MARK: - UIViewControllerTransitioningDelegate
 
@@ -100,7 +182,7 @@ extension Animation: UIViewControllerTransitioningDelegate {
     ///
     open func interactionControllerForPresentation(using animator: UIViewControllerAnimatedTransitioning)
         -> UIViewControllerInteractiveTransitioning? {
-        return presentationAnimation?.interactionController
+            return presentationAnimation?.interactionController
     }
 
     ///
@@ -115,6 +197,8 @@ extension Animation: UIViewControllerTransitioningDelegate {
     ///
     open func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning)
         -> UIViewControllerInteractiveTransitioning? {
-        return dismissalAnimation?.interactionController
+            return dismissalAnimation?.interactionController
     }
 }
+
+#endif

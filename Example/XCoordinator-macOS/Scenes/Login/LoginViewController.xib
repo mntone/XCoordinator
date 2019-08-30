@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="LoginViewController" customModule="XCoordinator_macOS_Example" customModuleProvider="target">
+            <connections>
+                <outlet property="loginButton" destination="gZ2-rg-nmi" id="qdC-Ja-qSM"/>
+                <outlet property="view" destination="c22-O7-iKe" id="U24-bF-1KN"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="c22-O7-iKe">
+            <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <stackView distribution="fill" orientation="vertical" alignment="centerX" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0kJ-cI-1Pa">
+                    <rect key="frame" x="20" y="171" width="440" height="81"/>
+                    <subviews>
+                        <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="A8T-Ba-jZV">
+                            <rect key="frame" x="120" y="59" width="200" height="22"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="200" id="552-5r-yOU"/>
+                            </constraints>
+                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="uMh-lD-jrn">
+                                <font key="font" metaFont="system"/>
+                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                        </textField>
+                        <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="LTY-tv-0R8">
+                            <rect key="frame" x="120" y="29" width="200" height="22"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="200" id="r3W-PP-TZL"/>
+                            </constraints>
+                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="pUI-7Q-Bnv">
+                                <font key="font" usesAppearanceFont="YES"/>
+                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                        </textField>
+                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gZ2-rg-nmi">
+                            <rect key="frame" x="183" y="-7" width="74" height="32"/>
+                            <buttonCell key="cell" type="push" title="Login" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="GYD-7Z-wtp">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                        </button>
+                    </subviews>
+                    <visibilityPriorities>
+                        <integer value="1000"/>
+                        <integer value="1000"/>
+                        <integer value="1000"/>
+                    </visibilityPriorities>
+                    <customSpacing>
+                        <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
+                    </customSpacing>
+                </stackView>
+            </subviews>
+            <constraints>
+                <constraint firstItem="0kJ-cI-1Pa" firstAttribute="leading" secondItem="c22-O7-iKe" secondAttribute="leading" constant="20" id="CIo-Nn-AWK"/>
+                <constraint firstAttribute="trailing" secondItem="0kJ-cI-1Pa" secondAttribute="trailing" constant="20" id="MK3-q2-YuK"/>
+                <constraint firstItem="0kJ-cI-1Pa" firstAttribute="top" secondItem="c22-O7-iKe" secondAttribute="top" constant="20" id="pK5-Iu-bay"/>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="0kJ-cI-1Pa" secondAttribute="bottom" constant="20" id="tuj-v0-8Le"/>
+            </constraints>
+        </customView>
+    </objects>
+</document>

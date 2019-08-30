@@ -21,8 +21,13 @@ public final class AnyRouter<RouteType: Route>: Router {
     private let _contextTrigger: (RouteType, TransitionOptions, ContextPresentationHandler?) -> Void
     private let _trigger: (RouteType, TransitionOptions, PresentationHandler?) -> Void
     private let _presented: (Presentable?) -> Void
+    #if os(macOS)
+    private let _viewController: () -> NSViewController?
+    private let _setRoot: (NSWindow) -> Void
+    #else
     private let _viewController: () -> UIViewController?
     private let _setRoot: (UIWindow) -> Void
+    #endif
 
     // MARK: - Initialization
 
@@ -94,7 +99,13 @@ public final class AnyRouter<RouteType: Route>: Router {
     /// In the case of a `UIViewController`, it returns itself.
     /// A coordinator returns its rootViewController.
     ///
+    #if os(macOS)
+    public var viewController: NSViewController! {
+        return _viewController()
+    }
+    #else
     public var viewController: UIViewController! {
         return _viewController()
     }
+    #endif
 }

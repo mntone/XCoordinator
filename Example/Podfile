@@ -1,13 +1,27 @@
-use_frameworks!
-platform :ios, '8.0'
+abstract_target 'XCoordinator' do
+  use_frameworks!
+  platform :ios, '8.0'
 
-target 'XCoordinator_Example' do
-  pod 'XCoordinator', :path => '../'
-  pod 'XCoordinator/RxSwift', :path => '../'
-  pod 'Action', '~> 3.9'
-  pod 'SwiftLint'
+  target 'XCoordinator_Example' do
+    pod 'XCoordinator', :path => '../'
+    pod 'XCoordinator/RxSwift', :path => '../'
+    pod 'Action', '~> 3.9'
+    pod 'SwiftLint'
 
-  target 'XCoordinator_Tests' do
-    inherit! :search_paths
+    target 'XCoordinator_Tests' do
+      inherit! :search_paths
+    end
+  end
+end
+
+abstract_target 'XCoordinator_macOS' do
+  use_frameworks!
+  platform :osx, '10.9'
+
+  target 'XCoordinator_macOS_Example' do
+    pod 'XCoordinator', :path => '../'
+    pod 'XCoordinator/RxSwift', :path => '../'
+    pod 'Action', '~> 3.9'
+    pod 'SwiftLint'
   end
 end

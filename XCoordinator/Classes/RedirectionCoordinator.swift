@@ -23,7 +23,11 @@ open class RedirectionCoordinator<RouteType: Route, TransitionType: TransitionPr
     // MARK: - Stored properties
 
     private let superTransitionPerformer: AnyTransitionPerformer<TransitionType>
+    #if os(macOS)
+    private let viewControllerBox = ReferenceBox<NSViewController>()
+    #else
     private let viewControllerBox = ReferenceBox<UIViewController>()
+    #endif
     private let _prepareTransition: ((RouteType) -> TransitionType)?
 
     // MARK: - Computed properties
@@ -33,9 +37,15 @@ open class RedirectionCoordinator<RouteType: Route, TransitionType: TransitionPr
         return superTransitionPerformer.rootViewController
     }
 
+    #if os(macOS)
+    open var viewController: NSViewController! {
+        return viewControllerBox.get()
+    }
+    #else
     open var viewController: UIViewController! {
         return viewControllerBox.get()
     }
+    #endif
 
     // MARK: - Initialization
 
@@ -54,6 +64,16 @@ open class RedirectionCoordinator<RouteType: Route, TransitionType: TransitionPr
     ///     - prepareTransition:
     ///         A closure preparing transitions for triggered routes.
     ///
+    #if os(macOS)
+    public init(viewController: NSViewController,
+                superTransitionPerformer: AnyTransitionPerformer<TransitionType>,
+                prepareTransition: ((RouteType) -> TransitionType)?) {
+
+        viewControllerBox.set(viewController)
+        self.superTransitionPerformer = superTransitionPerformer
+        _prepareTransition = prepareTransition
+    }
+    #else
     public init(viewController: UIViewController,
                 superTransitionPerformer: AnyTransitionPerformer<TransitionType>,
                 prepareTransition: ((RouteType) -> TransitionType)?) {
@@ -62,6 +82,7 @@ open class RedirectionCoordinator<RouteType: Route, TransitionType: TransitionPr
         self.superTransitionPerformer = superTransitionPerformer
         _prepareTransition = prepareTransition
     }
+    #endif
 
     ///
     /// Creates a RedirectionCoordinator with a viewController, a superTransitionPerfomer and an optional `prepareTransition` closure.
@@ -78,6 +99,17 @@ open class RedirectionCoordinator<RouteType: Route, TransitionType: TransitionPr
     ///     - prepareTransition:
     ///         A closure preparing transitions for triggered routes.
     ///
+    #if os(macOS)
+    public init<T: TransitionPerformer>(viewController: NSViewController,
+                                        superTransitionPerformer: T,
+                                        prepareTransition: ((RouteType) -> TransitionType)?
+        ) where T.TransitionType == TransitionType {
+
+        viewControllerBox.set(viewController)
+        self.superTransitionPerformer = AnyTransitionPerformer(superTransitionPerformer)
+        _prepareTransition = prepareTransition
+    }
+    #else
     public init<T: TransitionPerformer>(viewController: UIViewController,
                                         superTransitionPerformer: T,
                                         prepareTransition: ((RouteType) -> TransitionType)?
@@ -87,6 +119,7 @@ open class RedirectionCoordinator<RouteType: Route, TransitionType: TransitionPr
         self.superTransitionPerformer = AnyTransitionPerformer(superTransitionPerformer)
         _prepareTransition = prepareTransition
     }
+    #endif
 
     // MARK: - Methods
 
@@ -108,6 +141,8 @@ open class RedirectionCoordinator<RouteType: Route, TransitionType: TransitionPr
         superTransitionPerformer.performTransition(transition, with: options, completion: completion)
     }
 }
+
+#if os(iOS) || os(tvOS)
 
 // MARK: - Deprecated
 
@@ -137,3 +172,5 @@ extension RedirectionCoordinator {
                   prepareTransition: prepareTransition)
     }
 }
+
+#endif

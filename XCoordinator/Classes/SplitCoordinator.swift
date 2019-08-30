@@ -21,6 +21,20 @@ open class SplitCoordinator<RouteType: Route>: BaseCoordinator<RouteType, SplitT
         super.init(initialRoute: initialRoute)
     }
 
+    #if os(macOS)
+
+    ///
+    /// Creates a SplitCoordinator with a specified set of sections.
+    ///
+    /// - Parameter tabs:
+    ///     The presentables to be used as sections.
+    ///
+    public init(sections: [Presentable]) {
+        super.init(initialTransition: .set(sections))
+    }
+
+    #else
+
     ///
     /// Creates a SplitCoordinator and sets the specified presentables as the rootViewController's
     /// viewControllers.
@@ -35,4 +49,6 @@ open class SplitCoordinator<RouteType: Route>: BaseCoordinator<RouteType, SplitT
     public init(master: Presentable, detail: Presentable?) {
         super.init(initialTransition: .set([master, detail].compactMap { $0 }))
     }
+
+    #endif
 }

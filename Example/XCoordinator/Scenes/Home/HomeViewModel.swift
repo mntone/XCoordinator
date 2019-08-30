@@ -22,7 +22,9 @@ protocol HomeViewModel {
     var input: HomeViewModelInput { get }
     var output: HomeViewModelOutput { get }
 
+    #if os(iOS) || os(tvOS)
     func registerPeek(for sourceView: Container)
+	#endif
 }
 
 extension HomeViewModel where Self: HomeViewModelInput & HomeViewModelOutput {

@@ -25,14 +25,24 @@ open class RedirectionRouter<SuperRoute: Route, RouteType: Route>: Router {
     public let superRouter: AnyRouter<SuperRoute>
 
     private let _map: ((RouteType) -> SuperRoute)?
+    #if os(macOS)
+    private let viewControllerBox: ReferenceBox<NSViewController>
+    #else
     private let viewControllerBox: ReferenceBox<UIViewController>
+    #endif
 
     // MARK: - Computed properties
 
     /// The viewController used in transitions, e.g. when pushing, presenting or otherwise displaying the RedirectionRouter.
+    #if os(macOS)
+    public var viewController: NSViewController! {
+        return viewControllerBox.get()
+    }
+    #else
     public var viewController: UIViewController! {
         return viewControllerBox.get()
     }
+    #endif
 
     // MARK: - Initialization
 
@@ -51,6 +61,15 @@ open class RedirectionRouter<SuperRoute: Route, RouteType: Route>: Router {
     ///     - map:
     ///         A mapping from this RedirectionRouter's routes to the superRouter's routes.
     ///
+    #if os(macOS)
+    public init(viewController: NSViewController,
+                superRouter: AnyRouter<SuperRoute>,
+                map: ((RouteType) -> SuperRoute)?) {
+        self.superRouter = superRouter
+        self._map = map
+        self.viewControllerBox = ReferenceBox(viewController)
+    }
+    #else
     public init(viewController: UIViewController,
                 superRouter: AnyRouter<SuperRoute>,
                 map: ((RouteType) -> SuperRoute)?) {
@@ -58,6 +77,7 @@ open class RedirectionRouter<SuperRoute: Route, RouteType: Route>: Router {
         self._map = map
         self.viewControllerBox = ReferenceBox(viewController)
     }
+    #endif
 
     ///
     /// Creates a RedirectionRouter with a certain viewController, a superRouter and an optional mapping.
@@ -74,6 +94,15 @@ open class RedirectionRouter<SuperRoute: Route, RouteType: Route>: Router {
     ///     - map:
     ///         A mapping from this RedirectionRouter's routes to the superRouter's routes.
     ///
+    #if os(macOS)
+    public init<RouterType: Router>(viewController: NSViewController,
+                                    superRouter: RouterType,
+                                    map: ((RouteType) -> SuperRoute)?) where RouterType.RouteType == SuperRoute {
+        self.superRouter = AnyRouter(superRouter)
+        self._map = map
+        self.viewControllerBox = ReferenceBox(viewController)
+    }
+    #else
     public init<RouterType: Router>(viewController: UIViewController,
                                     superRouter: RouterType,
                                     map: ((RouteType) -> SuperRoute)?) where RouterType.RouteType == SuperRoute {
@@ -81,6 +110,7 @@ open class RedirectionRouter<SuperRoute: Route, RouteType: Route>: Router {
         self._map = map
         self.viewControllerBox = ReferenceBox(viewController)
     }
+    #endif
 
     // MARK: - Methods
 

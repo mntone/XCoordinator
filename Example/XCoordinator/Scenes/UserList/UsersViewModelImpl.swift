@@ -14,13 +14,22 @@ class UsersViewModelImpl: UsersViewModel, UsersViewModelInput, UsersViewModelOut
 
     // MARK: - Inputs
 
-    lazy var showUserTrigger: InputSubject<String> = showUserAction.inputs
+    private(set) lazy var showUserTrigger: InputSubject<String> = showUserAction.inputs
+	#if os(macOS)
+	private(set) lazy var closeTrigger: InputSubject<Void> = closeAction.inputs
+	#endif
 
     // MARK: - Actions
 
     private lazy var showUserAction = Action<String, Void> { [unowned self] username in
         self.router.rx.trigger(.user(username))
     }
+	
+	#if os(macOS)
+	private lazy var closeAction = CocoaAction { [unowned self] in
+		self.router.rx.trigger(.close)
+	}
+	#endif
 
     // MARK: - Outputs
 

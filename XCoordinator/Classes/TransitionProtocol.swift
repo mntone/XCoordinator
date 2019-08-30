@@ -14,8 +14,13 @@
 public protocol TransitionProtocol: TransitionContext {
 
     /// The type of the rootViewController that can execute the transition.
+    #if os(macOS)
+    associatedtype RootViewController: NSViewController
+    #else
     associatedtype RootViewController: UIViewController
+    #endif
 
+    #if os(iOS) || os(tvOS)
     ///
     /// Perform the transition on the specified coordinator.
     ///
@@ -31,6 +36,7 @@ public protocol TransitionProtocol: TransitionContext {
     func perform<C: Coordinator>(options: TransitionOptions,
                                  coordinator: C,
                                  completion: PresentationHandler?) where C.TransitionType == Self
+    #endif
 
     ///
     /// Performs a transition on the given viewController.

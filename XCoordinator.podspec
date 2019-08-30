@@ -9,13 +9,15 @@ Pod::Spec.new do |spec|
     spec.module_name = 'XCoordinator'
     spec.swift_version = '5.0'
     spec.ios.deployment_target = '8.0'
-    spec.source_files = 'XCoordinator/Classes/*.swift'
+    spec.osx.deployment_target = "10.10"
+    spec.source_files    = 'XCoordinator/Classes/**/*.swift'
     spec.default_subspec = 'Core'
 
     spec.subspec 'Core' do |ss|
-        ss.source_files = 'XCoordinator/Classes/*.swift'
-        ss.framework  = 'Foundation'
-        ss.framework  = 'UIKit'
+        ss.source_files  = 'XCoordinator/Classes/**/*.swift'
+        ss.framework     = 'Foundation'
+        ss.ios.framework = 'UIKit'
+        ss.osx.framework = 'AppKit'
     end
 
     spec.subspec 'RxSwift' do |ss|

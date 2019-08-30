@@ -6,6 +6,38 @@
 //  Copyright © 2018 QuickBird Studios. All rights reserved.
 //
 
+#if os(macOS)
+
+/// PageTransition offers transitions that can be used
+/// with a `NSPageController` rootViewController.
+public typealias PageTransition = Transition<NSPageController>
+
+extension Transition where RootViewController: NSPageController {
+
+    ///
+    /// Transition to select a page.
+    ///
+    /// - Parameters:
+    ///     - index:
+    ///         The index of the page to be selected. Make sure that there is a page at the specified index.
+    ///
+    public static func select(index: Int) -> PageTransition {
+        return PageTransition(presentables: [], animationInUse: nil) { rootViewController, options, completion in
+            rootViewController.select(index: index, with: options, completion: completion)
+        }
+    }
+
+    static func initial(pages: [Presentable], index: Int) -> Transition {
+        return Transition(presentables: pages, animationInUse: nil) { rootViewController, _, completion in
+            rootViewController.selectedIndex = index
+            pages.forEach { $0.presented(from: rootViewController) }
+            completion?()
+        }
+    }
+}
+
+#else
+
 /// PageTransition offers transitions that can be used
 /// with a `UIPageViewController` rootViewController.
 public typealias PageTransition = Transition<UIPageViewController>
@@ -51,3 +83,5 @@ extension Transition where RootViewController: UIPageViewController {
         }
     }
 }
+
+#endif

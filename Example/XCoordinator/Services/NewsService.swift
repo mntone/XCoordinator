@@ -10,10 +10,18 @@ import RxSwift
 
 // swiftlint:disable line_length
 
+#if os(macOS)
+typealias ColorType = NSColor
+typealias ImageType = NSImage
+#else
+typealias ColorType = UIColor
+typealias ImageType = UIImage
+#endif
+
 struct News {
     var title: String
     var subtitle: String
-    var image: UIImage
+    var image: ImageType
     var content: String
 }
 
@@ -23,13 +31,13 @@ protocol NewsService {
 
 class MockNewsService: NewsService {
     let mockNews: [News] = [
-        News(title: "Example article 0", subtitle: "Stefan", image: UIImage.from(color: .black, size: CGSize(width: 44, height: 44)), content: loremIpsum),
-        News(title: "Example article 1", subtitle: "Malte", image: UIImage.from(color: .blue, size: CGSize(width: 44, height: 44)), content: loremIpsum),
-        News(title: "Example article 2", subtitle: "Julian", image: UIImage.from(color: .green, size: CGSize(width: 44, height: 44)), content: loremIpsum),
-        News(title: "Example article 3", subtitle: "Niko", image: UIImage.from(color: .yellow, size: CGSize(width: 44, height: 44)), content: loremIpsum),
-        News(title: "Example article 4", subtitle: "Paul", image: UIImage.from(color: .orange, size: CGSize(width: 44, height: 44)), content: loremIpsum),
-        News(title: "Example article 5", subtitle: "Patrick", image: UIImage.from(color: .red, size: CGSize(width: 44, height: 44)), content: loremIpsum),
-        News(title: "Example article 6", subtitle: "Sebastian", image: UIImage.from(color: .white, size: CGSize(width: 44, height: 44)), content: loremIpsum)
+        News(title: "Example article 0", subtitle: "Stefan", image: ImageType.from(color: .black, size: CGSize(width: 44, height: 44)), content: loremIpsum),
+        News(title: "Example article 1", subtitle: "Malte", image: ImageType.from(color: .blue, size: CGSize(width: 44, height: 44)), content: loremIpsum),
+        News(title: "Example article 2", subtitle: "Julian", image: ImageType.from(color: .green, size: CGSize(width: 44, height: 44)), content: loremIpsum),
+        News(title: "Example article 3", subtitle: "Niko", image: ImageType.from(color: .yellow, size: CGSize(width: 44, height: 44)), content: loremIpsum),
+        News(title: "Example article 4", subtitle: "Paul", image: ImageType.from(color: .orange, size: CGSize(width: 44, height: 44)), content: loremIpsum),
+        News(title: "Example article 5", subtitle: "Patrick", image: ImageType.from(color: .red, size: CGSize(width: 44, height: 44)), content: loremIpsum),
+        News(title: "Example article 6", subtitle: "Sebastian", image: ImageType.from(color: .white, size: CGSize(width: 44, height: 44)), content: loremIpsum)
     ]
 
     func mostRecentNews() -> (title: String, articles: [News]) {
@@ -37,15 +45,24 @@ class MockNewsService: NewsService {
     }
 }
 
-extension UIImage {
-    static func from(color: UIColor, size: CGSize = .init(width: 1, height: 1)) -> UIImage! {
-        let rect = CGRect(origin: .zero, size: size)
+extension ImageType {
+    static func from(color: ColorType, size: CGSize = .init(width: 1, height: 1)) -> ImageType! {
+		let rect = CGRect(origin: .zero, size: size)
+		#if os(macOS)
+		let image = NSImage(size: NSSize(width: size.width, height: size.height))
+		image.lockFocus(); defer { image.unlockFocus() }
+		guard let context = NSGraphicsContext.current else { return nil }
+		context.cgContext.setFillColor(color.cgColor)
+		context.cgContext.fill(rect)
+		return image
+		#else
         UIGraphicsBeginImageContext(rect.size)
         guard let context = UIGraphicsGetCurrentContext() else { return nil }
         defer { UIGraphicsEndImageContext() }
         context.setFillColor(color.cgColor)
         context.fill(rect)
         return UIGraphicsGetImageFromCurrentImageContext()
+		#endif
     }
 }
 

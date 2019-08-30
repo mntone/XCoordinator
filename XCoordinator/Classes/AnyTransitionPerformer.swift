@@ -18,16 +18,26 @@ public class AnyTransitionPerformer<TransitionType: TransitionProtocol>: Transit
 
     // MARK: - Stored properties
 
+    #if os(macOS)
+    private var _viewController: () -> NSViewController?
+    #else
     private var _viewController: () -> UIViewController?
+    #endif
     private var _rootViewController: () -> TransitionType.RootViewController
     private var _presented: (Presentable?) -> Void
     private var _perform: (TransitionType, TransitionOptions, PresentationHandler?) -> Void
 
     // MARK: - Computed properties
 
+    #if os(macOS)
+    public var viewController: NSViewController! {
+        return _viewController()
+    }
+    #else
     public var viewController: UIViewController! {
         return _viewController()
     }
+    #endif
 
     public var rootViewController: TransitionType.RootViewController {
         return _rootViewController()

@@ -6,6 +6,28 @@
 //  Copyright © 2018 QuickBird Studios. All rights reserved.
 //
 
+#if os(macOS)
+
+extension NSPageController {
+    func select(index: Int,
+                with options: XCoordinator.TransitionOptions,
+                completion: PresentationHandler?) {
+        if options.animated {
+            NSAnimationContext.runAnimationGroup({ _ in
+                animator().selectedIndex = index
+            }, completionHandler: {
+                self.completeTransition()
+                completion?()
+            })
+        } else {
+            selectedIndex = index
+            completion?()
+        }
+    }
+}
+
+#else
+
 extension UIPageViewController {
     func set(_ viewControllers: [UIViewController],
              direction: UIPageViewController.NavigationDirection,
@@ -19,3 +41,5 @@ extension UIPageViewController {
         )
     }
 }
+
+#endif

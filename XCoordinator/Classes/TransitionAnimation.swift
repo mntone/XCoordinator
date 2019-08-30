@@ -8,6 +8,22 @@
 
 import Foundation
 
+#if os(macOS)
+
+///
+/// TransitionAnimation aims to provide a common protocol for any type of transition animation used in an `Animation` object.
+///
+/// XCoordinator provides different implementations of this protocol with the `StaticTransitionAnimation`,
+/// `InteractiveTransitionAnimation` and `InterruptibleTransitionAnimation` classes.
+///
+public protocol TransitionAnimation {
+
+    /// This method performs the animation.
+    func animate(using transitionContext: NSViewControllerContextTransitioning)
+}
+
+#else
+
 ///
 /// TransitionAnimation aims to provide a common protocol for any type of transition animation used in an `Animation` object.
 ///
@@ -33,6 +49,10 @@ public protocol TransitionAnimation: UIViewControllerAnimatedTransitioning {
     /// Cleans up a TransitionAnimation after an animation has been completed, e.g. by deleting an interaction controller.
     func cleanup()
 }
+
+#endif
+
+#if os(iOS) || os(tvOS)
 
 ///
 /// PercentDrivenInteractionController is used for interaction controller types that can updated based on a percentage of completion.
@@ -66,3 +86,5 @@ public protocol PercentDrivenInteractionController: UIViewControllerInteractiveT
 }
 
 extension UIPercentDrivenInteractiveTransition: PercentDrivenInteractionController {}
+
+#endif

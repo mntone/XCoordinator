@@ -34,7 +34,7 @@ class NewsCoordinator: NavigationCoordinator<NewsRoute> {
             return .push(viewController)
         case .newsDetail(let news):
             let viewController = NewsDetailViewController.instantiateFromNib()
-            let viewModel = NewsDetailViewModelImpl(news: news)
+            let viewModel = NewsDetailViewModelImpl(news: news, router: anyRouter)
             viewController.bind(to: viewModel)
             let animation: Animation
             if #available(iOS 10.0, *) {

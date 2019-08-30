@@ -6,14 +6,27 @@
 //  Copyright © 2018 QuickBird Studios. All rights reserved.
 //
 
+#if os(iOS) || os(tvOS)
+
 /// A BasicCoordinator with a `UINavigationController` as its rootViewController.
 public typealias BasicNavigationCoordinator<R: Route> = BasicCoordinator<R, NavigationTransition>
+
+#endif
 
 /// A BasicCoordinator with a `UIViewController` as its rootViewController.
 public typealias BasicViewCoordinator<R: Route> = BasicCoordinator<R, ViewTransition>
 
+#if os(macOS)
+
+/// A BasicCoordinator with a `NSTabViewController` as its rootViewController.
+public typealias BasicTabBarCoordinator<R: Route> = BasicCoordinator<R, TabViewTransition>
+
+#else
+
 /// A BasicCoordinator with a `UITabBarController` as its rootViewController.
 public typealias BasicTabBarCoordinator<R: Route> = BasicCoordinator<R, TabBarTransition>
+
+#endif
 
 ///
 /// BasicCoordinator is a coordinator class that can be used without subclassing.
@@ -90,7 +103,11 @@ open class BasicCoordinator<RouteType: Route, TransitionType: TransitionProtocol
         super.presented(from: presentable)
 
         if let initialRoute = initialRoute, initialLoadingType == .presented {
+            #if os(macOS)
+            trigger(initialRoute, with: .default, completion: nil)
+            #else
             trigger(initialRoute, with: TransitionOptions(animated: false), completion: nil)
+            #endif
         }
     }
 

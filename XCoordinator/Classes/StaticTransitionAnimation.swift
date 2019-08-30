@@ -20,13 +20,19 @@ open class StaticTransitionAnimation: NSObject, TransitionAnimation {
     // MARK: - Stored properties
 
     internal let duration: TimeInterval
+    #if os(macOS)
+    private let _performAnimation: (_ transitionContext: NSViewControllerContextTransitioning) -> Void
+    #else
     private let _performAnimation: (_ transitionContext: UIViewControllerContextTransitioning) -> Void
+    #endif
 
     // MARK: - Computed properties
 
+    #if os(iOS) || os(tvOS)
     open var interactionController: PercentDrivenInteractionController? {
         return self as? PercentDrivenInteractionController
     }
+    #endif
 
     // MARK: - Initialization
 
@@ -41,10 +47,28 @@ open class StaticTransitionAnimation: NSObject, TransitionAnimation {
     ///         From the context, you can access source and destination views and
     ///         viewControllers and the containerView.
     ///
+    #if os(macOS)
+    public init(duration: TimeInterval, performAnimation: @escaping (_ context: NSViewControllerContextTransitioning) -> Void) {
+        self.duration = duration
+        self._performAnimation = performAnimation
+    }
+    #else
     public init(duration: TimeInterval, performAnimation: @escaping (_ context: UIViewControllerContextTransitioning) -> Void) {
         self.duration = duration
         self._performAnimation = performAnimation
     }
+    #endif
+
+    #if os(macOS)
+
+    // MARK: - Methods
+
+    /// This method performs the animation.
+    open func animate(using transitionContext: NSViewControllerContextTransitioning) {
+        _performAnimation(transitionContext)
+    }
+
+    #else
 
     // MARK: - Methods
 
@@ -79,8 +103,11 @@ open class StaticTransitionAnimation: NSObject, TransitionAnimation {
 
     open func start() {}
     open func cleanup() {}
+
+    #endif
 }
 
+#if os(iOS) || os(tvOS)
 extension StaticTransitionAnimation {
 
     ///
@@ -94,3 +121,4 @@ extension StaticTransitionAnimation {
         _performAnimation(transitionContext)
     }
 }
+#endif

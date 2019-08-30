@@ -20,7 +20,11 @@ public protocol Presentable {
     /// In the case of a `UIViewController`, it returns itself.
     /// A coordinator returns its rootViewController.
     ///
+    #if os(macOS)
+    var viewController: NSViewController! { get }
+    #else
     var viewController: UIViewController! { get }
+    #endif
 
     ///
     /// This method can be used to retrieve whether the presentable can trigger a specific route
@@ -50,7 +54,11 @@ public protocol Presentable {
     /// - Parameter window:
     ///     The window to set the root of.
     ///
+    #if os(macOS)
+    func setRoot(for window: NSWindow)
+    #else
     func setRoot(for window: UIWindow)
+    #endif
 }
 
 extension Presentable {
@@ -64,11 +72,21 @@ extension Presentable {
     /// - Parameter window:
     ///     The window to set the root of.
     ///
+    #if os(macOS)
+    public func setRoot(for window: NSWindow) {
+        window.contentViewController = viewController
+        window.frameRect(forContentRect: viewController.view.frame)
+        window.center()
+        window.makeKeyAndOrderFront(nil)
+        presented(from: window)
+    }
+    #else
     public func setRoot(for window: UIWindow) {
         window.rootViewController = viewController
         window.makeKeyAndVisible()
         presented(from: window)
     }
+    #endif
 
     public func router<R: Route>(for route: R) -> AnyRouter<R>? {
         return self as? AnyRouter<R>
@@ -77,5 +95,10 @@ extension Presentable {
     public func presented(from presentable: Presentable?) {}
 }
 
+#if os(macOS)
+extension NSViewController: Presentable {}
+extension NSWindow: Presentable {}
+#else
 extension UIViewController: Presentable {}
 extension UIWindow: Presentable {}
+#endif

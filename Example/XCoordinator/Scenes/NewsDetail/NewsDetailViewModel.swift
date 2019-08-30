@@ -10,6 +10,9 @@ import Action
 import RxSwift
 
 protocol NewsDetailViewModelInput {
+	#if os(macOS)
+	var backTrigger: InputSubject<Void> { get }
+	#endif
 }
 
 protocol NewsDetailViewModelOutput {
