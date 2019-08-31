@@ -15,9 +15,9 @@ class NewsDetailViewController: NSViewController, BindableType {
 
     // MARK: - Views
 
-    @IBOutlet private weak var backButton: NSButton!
-    @IBOutlet private weak var imageView: NSImageView!
-    @IBOutlet private weak var titleLabel: NSTextField!
+    @IBOutlet private var backButton: NSButton!
+    @IBOutlet private var imageView: NSImageView!
+    @IBOutlet private var titleLabel: NSTextField!
     @IBOutlet private var contentTextView: NSTextView!
 
     // MARK: - Stored properties

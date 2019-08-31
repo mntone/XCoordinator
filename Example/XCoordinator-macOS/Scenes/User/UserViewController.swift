@@ -15,9 +15,9 @@ class UserViewController: NSViewController, BindableType {
 
     // MARK: - Views
 
-    @IBOutlet private weak var username: NSTextField!
-    @IBOutlet private weak var showAlertButton: NSButton!
-    @IBOutlet private weak var closeButton: NSButton!
+    @IBOutlet private var username: NSTextField!
+    @IBOutlet private var showAlertButton: NSButton!
+    @IBOutlet private var closeButton: NSButton!
 
     // MARK: - Stored properties
 

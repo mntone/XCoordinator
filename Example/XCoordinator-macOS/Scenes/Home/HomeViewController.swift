@@ -15,9 +15,9 @@ class HomeViewController: NSViewController, BindableType {
 
     // MARK: - Views
 
-    @IBOutlet private weak var logoutButton: NSButton!
-    @IBOutlet private weak var usersButton: NSButton!
-    @IBOutlet private weak var aboutButton: NSButton!
+    @IBOutlet private var logoutButton: NSButton!
+    @IBOutlet private var usersButton: NSButton!
+    @IBOutlet private var aboutButton: NSButton!
 
     // MARK: - Stored properties
 

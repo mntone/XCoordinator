@@ -24,8 +24,8 @@ class UsersViewController: NSViewController, BindableType {
 
     // MARK: - Views
 
-    @IBOutlet private weak var closeButton: NSButton!
-    @IBOutlet private weak var tableView: NSTableView!
+    @IBOutlet private var closeButton: NSButton!
+    @IBOutlet private var tableView: NSTableView!
 
     // MARK: - Stored properties
 
