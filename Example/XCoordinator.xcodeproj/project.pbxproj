@@ -617,7 +617,7 @@
 				EBA77FFF231787490089A56D /* main.swift */,
 				EBA77FBF231619540089A56D /* Assets.xcassets */,
 			);
-			name = Common;
+			path = Common;
 			sourceTree = "<group>";
 		};
 		EBA77FD1231776AD0089A56D /* Scenes */ = {
