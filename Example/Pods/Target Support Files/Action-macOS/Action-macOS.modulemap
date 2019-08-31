@@ -1,0 +1,6 @@
+framework module Action {
+  umbrella header "Action-macOS-umbrella.h"
+
+  export *
+  module * { export * }
+}
